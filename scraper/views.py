@@ -9,6 +9,14 @@ from scraper.strava_scraper import StravaScraper
 from bs4 import BeautifulSoup
 
 
+class ScrapeHomeView(View):
+    def get(self, request):
+        return render(request, 'scraper/scraper_home.html', context={})
+
+    def post(self, request):
+        ...
+
+
 class ScrapeClubMembers(View):
     def get(self, request):
         return get_my_club_members('mirko.dravik@gmail.com', 'Dravikson123', '515628') #TODO: zrobić do tego widok, żeby wysyłać postem dane co ma zeskrpować ze stravy (lista segmentów, członków klubu, leaderboardy)
