@@ -62,7 +62,7 @@ def ewodd_weekly_segment_selection(segment_id, time_frame):
     team_filter_selection()
     time_frame_selection(time_frame)
 
-
+# funkcja pomocnicza służąca do zapisywania wyników do pliku csv, należy ją również uaktualnić
 def get_and_save_to_csv():
     html = driver.execute_script('return document.documentElement.outerHTML')
     soup = BeautifulSoup(html, 'html.parser')
@@ -120,13 +120,19 @@ def get_leaderboard(segment_id):
     results_table = soup.find('table', {'class': 'table-leaderboard'}).find('tbody')
     rows = results_table.findAllNext('tr')
     now = datetime.datetime.now()
+    week_number = now.isocalendar()[1]
+    max_points = 5
     time_filter = leaderboard_state.get('time_filter')
     try:
         for row in rows:
             row_properties = row.find_all('td')
             athlete_properties = row.find('td', {'class': 'athlete track-click'})
             data_tracking = json.loads(athlete_properties.attrs.get('data-tracking-properties'))
-            if time_filter == 'today':
+            rank = data_tracking.get('rank')
+            points = max_points - rank + 1
+            if points < 1:
+                points = 0
+            if time_filter == 'today': #TODO: dorobić jeszcze 'this_month' i 'this_year'
                 leaderboard_athlete_number = str(now.isocalendar()[0]) + \
                                          str(now.isocalendar()[1]) + \
                                          str(segment_id) + \
@@ -148,8 +154,10 @@ def get_leaderboard(segment_id):
                 avg_power=row_properties[5].text.strip(),
                 vam=row_properties[6].text.strip(),
                 time_result=row_properties[7].text.strip(),
-                time_filter=time_filter
+                time_filter=time_filter,
                 # TODO: czy da się to od razu sformatować na czas: HH:MM:SS jeżeli dane są czasami przesyłane jako HH:MM:SS a czasem MM:SS
+                points=points,
+                week_number=week_number
             )
             foreign_keys = dict(
                 strava_athlete_id=int(data_tracking.get('athlete_id')),
