@@ -25,10 +25,16 @@ class SegmentDescription(models.Model):
     srodunia_segment_zone = models.CharField(choices=SEGMENT_ZONES, null=True, max_length=255)
     srodunia_segment_section = models.CharField(choices=SEGMENT_SECTIONS, null=True, max_length=255)
 
+    def __str__(self):
+        return f'{self.strava_segment_name}'
+
 
 class StravaClubs(models.Model):
     club_id = models.IntegerField(unique=True)
     club_name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f'{self.club_name}'
 
 
 class AthleteDetails(models.Model):
@@ -38,6 +44,9 @@ class AthleteDetails(models.Model):
     athlete_avatar_img_url = models.URLField()
     role = models.CharField(max_length=32)
     club_id = models.ManyToManyField(StravaClubs)
+
+    def __str__(self):
+        return f'{self.strava_athlete_name}'
 
 
 class StravaSegmentLeaderboard(models.Model):
@@ -56,3 +65,5 @@ class StravaSegmentLeaderboard(models.Model):
     time_filter = models.CharField(max_length=32, null=True)
     club_id = models.ForeignKey(StravaClubs, on_delete=models.CASCADE, null=True)
     date_added = models.DateField(auto_now_add=True)
+    points = models.IntegerField(null=True)
+    week_number = models.IntegerField(null=True)
