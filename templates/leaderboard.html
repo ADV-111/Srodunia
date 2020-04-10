@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}
+    Leaderboard
+{% endblock %}
+{% block content %}
+
+    <ul>
+        {% for record in athletedetails_list %}
+            <p>{{ record }}</p>
+        {% endfor %}
+    </ul>
+{% endblock %}

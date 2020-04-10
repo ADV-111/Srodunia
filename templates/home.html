@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}
+    Home View
+{% endblock %}
+{% block content %}
+    <div class="container">
+    <a class="btn-link" href="{% url 'scrape_home' %}">Skrob Strave!</a>
+{#    <a href="{% url 'results' %}">Pokaż dane</a>#}
+    </div>
+{% endblock %}

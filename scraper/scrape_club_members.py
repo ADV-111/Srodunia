@@ -7,12 +7,8 @@ from bs4 import BeautifulSoup
 def push_athlete_to_db(strava_athlete_id, strava_athlete_name, athlete_avatar_img_url, role, strava_club_id):
     athlete, created = AthleteDetails.objects.get_or_create(
         strava_athlete_id=strava_athlete_id,
-        defaults={
-            'strava_athlete_id': strava_athlete_id,
-            'strava_athlete_name': strava_athlete_name,
-            'athlete_avatar_img_url': athlete_avatar_img_url,
-            'role': role,
-        }
+        defaults=dict(strava_athlete_id=strava_athlete_id, strava_athlete_name=strava_athlete_name,
+                      athlete_avatar_img_url=athlete_avatar_img_url, role=role)
     )
     club_pk = StravaClubs.objects.get(club_id=strava_club_id)
     athlete.club_id.add(club_pk)

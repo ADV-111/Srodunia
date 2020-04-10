@@ -3,6 +3,7 @@ from django.views import View
 
 from scraper.scrape_club_members import get_my_club_members
 from scraper.scrape_starred_segments import push_segment_to_db
+from scraper.scrape_leaderboards import scrape_weekly_leaderboards
 from scraper.models import AthleteDetails
 
 from scraper.strava_scraper import StravaScraper
@@ -27,7 +28,8 @@ class ScrapeClubMembers(View):
 
 class ScrapeSegmentsLeaderboards(View):
     def get(self, request):
-        ...
+        scrape_weekly_leaderboards('mirko.dravik@gmail.com', 'Dravikson123', ['23318709', '23332840', '23318831', '10347162', '21958688'], 'This Week') #TODO: żeby poprawnie wykonać skrapowanie LEADERBOARDÓW muszą być wczesniej zeskrobani członkowie klubu i ulubione segmenty
+        return render(request, 'home.html', {})
 
     def post(self, request):
         ...
