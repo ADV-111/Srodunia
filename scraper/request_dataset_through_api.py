@@ -7,6 +7,7 @@ ACCESS_TOKEN = refreshed_access_token()
 
 
 def get_starred_segments():
+    print('Getting segement list')
     request_dataset_url = BASE_URL + '/api/v3/segments/starred'  # check https://developers.strava.com/docs/reference/ for STRAVA API REQUESTS
     header = {'Authorization': 'Bearer ' + ACCESS_TOKEN}
     param = {'per_page': 200, 'page': 1}
@@ -25,6 +26,7 @@ def get_segment_details():
         header = {'Authorization': 'Bearer ' + ACCESS_TOKEN}
         segment_details = requests.get(request_dataset_url, headers=header).json()
         detailed_segment_list.append(segment_details)
+        print(f'Segment no. {starred_segment_list[i]} fetched')
     return detailed_segment_list
 
 

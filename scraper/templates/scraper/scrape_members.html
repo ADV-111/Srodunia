@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}
+    Scrape Club Members
+{% endblock %}
+{% block content %}
+    <form action="" method="post">{% csrf_token %}
+        <button class="btn btn-outline-danger" type="submit">UAKTUALNIJ LISTĘ ZAWODNIKÓW</button><br><br>
+    </form>
+    <h3>Zawodnicy klubu EWODD RACE TEAM</h3>
+    <table class="table table-striped table-hover table-bordered">
+        <thead>
+        <tr>
+            <th>l.p.</th>
+            <th>Zawodnik</th>
+            <th>Strava ID</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for athlete in athletes %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td><img class="rounded-circle" style="height: 35px; width: 35px "
+                         src="{{ athlete.athlete_avatar_img_url }}" alt="">{{ athlete.strava_athlete_name }}</td>
+                <td>{{ athlete.strava_athlete_id }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

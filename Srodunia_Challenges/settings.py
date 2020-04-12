@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'srodunia.apps.SroduniaConfig',
-    'scraper.apps.ScraperConfig'
+    'scraper.apps.ScraperConfig',
+    'django_extensions'
 ]
 
 MIDDLEWARE = [
