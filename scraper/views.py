@@ -4,7 +4,7 @@ from django.views import View
 from scraper.scrape_club_members import get_my_club_members
 from scraper.scrape_starred_segments import push_segment_to_db
 from scraper.scrape_leaderboards import scrape_weekly_leaderboards
-from scraper.models import AthleteDetails
+from scraper.models import AthleteDetails, SegmentDescription, StravaSegmentLeaderboard
 
 from scraper.strava_scraper import StravaScraper
 from bs4 import BeautifulSoup
@@ -20,24 +20,32 @@ class ScrapeHomeView(View):
 
 class ScrapeClubMembers(View):
     def get(self, request):
-        return get_my_club_members('mirko.dravik@gmail.com', 'Dravikson123', '515628') #TODO: zrobić do tego widok, żeby wysyłać postem dane co ma zeskrpować ze stravy (lista segmentów, członków klubu, leaderboardy)
+        athletes = AthleteDetails.objects.all()
+        return render(request, 'scraper/scrape_members.html', context={'athletes': athletes})
 
     def post(self, request):
-        ...
+        get_my_club_members('mirko.dravik@gmail.com', 'Dravikson123',
+                            '515628')  # TODO: zrobić do tego widok, żeby wysyłać postem dane co ma zeskrpować ze stravy (lista segmentów, członków klubu, leaderboardy)
+        return self.get(request)
 
 
 class ScrapeSegmentsLeaderboards(View):
     def get(self, request):
-        scrape_weekly_leaderboards('mirko.dravik@gmail.com', 'Dravikson123', ['23318709', '23332840', '23318831', '10347162', '21958688'], 'This Week') #TODO: żeby poprawnie wykonać skrapowanie LEADERBOARDÓW muszą być wczesniej zeskrobani członkowie klubu i ulubione segmenty
-        return render(request, 'home.html', {})
+        segments_to_scrape = SegmentDescription.objects.all()
+        return render(request, 'scraper/scrape_leaderboards.html', context={'segments': segments_to_scrape})
 
     def post(self, request):
-        ...
+        segments_to_scrape = request.POST.getlist('strava_segment_id')
+        print(segments_to_scrape)
+        scrape_weekly_leaderboards('mirko.dravik@gmail.com', 'Dravikson123', segments_to_scrape, 'This Week')
+        return self.get(request)
 
 
 class ScrapeStarredSegments(View):
     def get(self, request):
-        return push_segment_to_db()
+        segments = SegmentDescription.objects.all()
+        return render(request, 'scraper/scrape_segments.html', context={'segments': segments})
 
     def post(self, request):
-        ...
+        push_segment_to_db()
+        return self.get(request)

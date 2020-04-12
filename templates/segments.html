@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}
+    Segments All
+{% endblock %}
+{% block content %}
+    <table class="table table-striped table-hover table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">l.p.</th>
+                <th scope="col">Nazwa</th>
+                <th scope="col">Dystans</th>
+                <th scope="col">Wznios</th>
+                <th scope="col">Kategoria</th>
+                <th scope="col">Typ</th>
+                <th scope="col">Strefa</th>
+                <th scope="col">Sektor</th>
+                <th scope="col">Strava Link</th>
+                <th scope="col">Edycja</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for segment in segments %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td><a href="{% url 'segment_detailed' segment.id %}">{{ segment.strava_segment_name }}</a></td>
+                <td>{{ segment.distance }}</td>
+                <td>{{ segment.total_elevation_gain }}</td>
+                <td>{{ segment.get_srodunia_segment_cat_display }}</td>
+                <td>{{ segment.get_srodunia_segment_type_display }}</td>
+                <td>{{ segment.get_srodunia_segment_zone_display }}</td>
+                <td>{{ segment.get_srodunia_segment_section_display }}</td>
+                <td><a href="https://www.strava.com/segments/{{ segment.strava_segment_id }}" target="_blank">{{ segment.strava_segment_id }}</a></td>
+                <td><a class="btn btn-outline-primary" href="{% url 'segment_edit' segment.id %}">Edytuj</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

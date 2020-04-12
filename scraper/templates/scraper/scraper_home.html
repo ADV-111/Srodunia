@@ -4,6 +4,10 @@
 {% endblock %}
 {% block content %}
     <div class="container">
-
+        <ol>
+            <li><a href="{% url 'scrape_members' %}">Pobierz zawodników</a></li>
+            <li><a href="{% url 'scrape_segments' %}">Pobierz segmenty</a></li>
+            <li><a href="{% url 'scrape_leaderboards' %}">Pobierz tabele wyników</a></li>
+        </ol>
     </div>
 {% endblock %}

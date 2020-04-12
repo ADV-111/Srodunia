@@ -7,6 +7,7 @@ BASE_URL = 'https://www.strava.com'
 
 
 def refreshed_access_token():
+    print('Requesting refreshed access token from STRAVA API')
     auth_url = BASE_URL + '/oauth/token'
 
     payload = {

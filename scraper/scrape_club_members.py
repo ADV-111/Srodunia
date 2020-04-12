@@ -19,10 +19,12 @@ def get_my_club_members(email: str, password: str, strava_club_id: str):
     password = password
     scraper = StravaScraper(email, password)
     scraper.login()
+    print('Logged in to STRAVA')
 
     page = 1
     while page < 100:
         try:
+            print(f'Scrapping page: {page}')
             url = f"https://www.strava.com/clubs/{strava_club_id}/members?page={page}"
             response = scraper.get_page(url)
             soup = BeautifulSoup(response.content, 'html.parser')

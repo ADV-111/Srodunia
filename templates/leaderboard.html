@@ -3,10 +3,22 @@
     Leaderboard
 {% endblock %}
 {% block content %}
-
-    <ul>
-        {% for record in athletedetails_list %}
-            <p>{{ record }}</p>
-        {% endfor %}
-    </ul>
+    <table>
+        <thead>
+            <tr>
+                <th>l.p.</th>
+                <th>Zawodnik</th>
+                <th>Punkty</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in leaderboard|dictsortreversed:'points__sum' %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ row.strava_athlete_id__strava_athlete_name }}</td>
+                    <td>{{ row.points__sum }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

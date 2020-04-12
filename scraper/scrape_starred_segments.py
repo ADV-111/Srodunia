@@ -3,6 +3,7 @@ from scraper.request_dataset_through_api import get_segment_details
 
 
 def push_segment_to_db():
+    print('Updating Segment Data Base')
     segments_list = get_segment_details()
     for i in segments_list:
         segment_id = i['id']
@@ -21,7 +22,6 @@ def push_segment_to_db():
                           strava_effort_count=i['effort_count'],
                           star_count=i['star_count'])
         )
-
 
 if __name__ == '__main__':
     push_segment_to_db()

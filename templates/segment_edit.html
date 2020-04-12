@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}
+    Edit Segment {{ segement.id }}
+{% endblock %}
+{% block content %}
+    <form action="" method="post">{% csrf_token %}
+        <div class="row">
+    <div class="col-8">
+        <h3>{{ segment.strava_segment_name }}</h3>
+        <form action="" method="post">
+        <table class="table table-borderless">
+            <thead>
+            <tr>
+                <th>Dystans</th>
+                <th>Średnie nachylenie</th>
+                <th>Nachylenie Max</th>
+                <th>Wznios</th>
+                <th>Typ</th>
+                <th>Kat.</th>
+                <th>Strefa</th>
+                <th>Sektor</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{ segment.distance }}</td>
+                <td>{{ segment.average_grade }}</td>
+                <td>{{ segment.maximum_grade }}</td>
+                <td>{{ segment.total_elevation_gain }}</td>
+                <td><select name="srodunia_segment_type">
+                    <option value="{{ segment.srodunia_segment_type }}" selected></option>
+                    {% for segment_type in segment_types %}
+                        <option value="{{ segment_type.0 }}">{{ segment_type.1 }}</option>
+                    {% endfor %}
+                </select>
+                </td>
+                <td><select name="srodunia_segment_cat">
+                    <option value="{{ segment.srodunia_segment_cat }}" selected></option>
+                    {% for segment_cat in segment_cats %}
+                        <option value="{{ segment_cat.0 }}">{{ segment_cat.1 }}</option>
+                    {% endfor %}
+                </select>
+                </td>
+                <td><select name="srodunia_segment_zone">
+                    <option value="{{ segment.srodunia_segment_zone }}" selected></option>
+                    {% for segment_zone in segment_zones %}
+                        <option value="{{ segment_zone.0 }}">{{ segment_zone.1 }}</option>
+                    {% endfor %}
+                </select>
+                </td>
+                 <td><select name="srodunia_segment_section">
+                    <option value="{{ segment.srodunia_segment_section }}" selected></option>
+                    {% for segment_section in segment_sections %}
+                        <option value="{{ segment_section.0 }}">{{ segment_section.1 }}</option>
+                    {% endfor %}
+                </select>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+            <input class="btn btn-outline-danger" type="submit" value="Zapisz">
+        </form>
+    </div>
+    <div class="col-4">
+        <iframe class="embed-responsive-item" style="width:90%;height:600px;"
+                src="https://veloviewer.com/segments/{{ segment.strava_segment_id }}/embed2?default2d=y" frameborder="0"
+                scrolling="no"></iframe>
+    </div>
+</div>
+    </form>
+{% endblock %}

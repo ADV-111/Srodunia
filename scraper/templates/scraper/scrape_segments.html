@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}
+    Scrape Starred Segments
+{% endblock %}
+{% block content %}
+    <form action="" method="post">{% csrf_token %}
+        <button class="btn btn-outline-danger" type="submit">UAKTUALNIJ LISTĘ SEGMENTÓW</button><br><br>
+    </form>
+        <table class="table table-striped table-hover table-bordered">
+            <thead>
+            <tr>
+                <th>l.p.</th>
+                <th>Nazwa</th>
+                <th>STRAVA ID</th>
+                <th>Typ</th>
+                <th>Kategoria</th>
+                <th>Strefa</th>
+                <th>Sekcja</th>
+                <th>Data Dodania</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for segment in segments %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ segment.strava_segment_name }}</td>
+                    <td>
+                        <a href="https://www.strava.com/segments/{{ segment.strava_segment_id }}">{{ segment.strava_segment_id }}</a>
+                    </td>
+                    <td>{{ segment.get_srodunia_segment_type_display }}</td>
+                    <td>{{ segment.get_srodunia_segment_cat_display }}</td>
+                    <td>{{ segment.get_srodunia_segment_zone_display }}</td>
+                    <td>{{ segment.get_srodunia_segment_section_display }}</td>
+                    <td>{{ segment.date_added }}</td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </form>
+{% endblock %}
