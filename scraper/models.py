@@ -77,7 +77,7 @@ class StravaSegmentLeaderboard(models.Model):
     rank = models.IntegerField() #TODO: jest możliwość zeskrobania KOMa dla segmentu
     strava_athlete_id = models.ForeignKey(AthleteDetails, on_delete=models.CASCADE, null=True)
     strava_activity_id = models.CharField(max_length=255)
-    strava_effort_id = models.CharField(max_length=255, unique=True)
+    strava_effort_id = models.CharField(max_length=255)
     strava_segement_id = models.ForeignKey(SegmentDescription, on_delete=models.CASCADE, null=True)
     effort_date = models.DateField()
     avg_speed = models.CharField(max_length=32)

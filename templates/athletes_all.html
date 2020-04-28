@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}
+    Athletes All
+{% endblock %}
+{% block content %}
+    <table class="table table-striped table-hover table-bordered">
+        <thead>
+        <tr>
+            <th>l.p.</th>
+            <th>Zawodnik</th>
+            <th>Strava ID</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for athlete in athletes %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td><img class="rounded-circle" style="height: 35px; width: 35px " src="{{ athlete.athlete_avatar_img_url }}" alt=""><a href="{% url 'athlete_detailed' athlete.id %}">{{ athlete.strava_athlete_name }}</a></td>
+                <td><a href="https://www.strava.com/athletes/{{ athlete.strava_athlete_id }}" target="_blank">{{ athlete.strava_athlete_id }}</a></td>
+            </tr>
+        {% endfor %}
+
+
+
+
+{#        {% for athlete in athletes %}#}
+{#            <tr>#}
+{#                <td>{{ forloop.counter }}</td>#}
+{#                <td><img class="rounded-circle" style="height: 35px; width: 35px "#}
+{#                         src="{{ athlete.athlete_avatar_img_url }}" alt="">{{ athlete.strava_athlete_name }}</td>#}
+{#                <td>{{ athlete.strava_athlete_id }}</td>#}
+{#            </tr>#}
+{#        {% endfor %}#}
+        </tbody>
+    </table>
+{% endblock %}

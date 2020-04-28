@@ -16,7 +16,7 @@
         </tr>
         </thead>
         <tbody>
-        {% for athlete in athletes %}
+        {% for athlete in athletes|dictsort:'strava_athlete_name' %}
             <tr>
                 <td>{{ forloop.counter }}</td>
                 <td><img class="rounded-circle" style="height: 35px; width: 35px "

@@ -3,43 +3,67 @@
     Scrape Leaderboards
 {% endblock %}
 {% block content %}
-    <form action="" method="post">{% csrf_token %}
-        <button class="btn btn-outline-danger bg-white bg-danger position-fixed" type="submit">UAKTUALNIJ TABELE WYNIKÓW</button><br><br>
+    <form role="form" method="post">{% csrf_token %}
+        <button class="btn btn-outline-danger bg-white bg-danger position-fixed" type="submit">UAKTUALNIJ TABELE
+            WYNIKÓW
+        </button>
+        <span class="float-right">
+            <label for="time_frame">Wybierz zakres do zeskrobania</label>
+            <select name="time_frame" id="time_frame">
+                <option value="Today">Today</option>
+                <option value="This Week" selected>This Week</option>
+            </select>
+        </span>
+        <br><br>
 
         <table class="table table-striped table-hover table-bordered">
             <thead>
-                <tr>
-                    <th>l.p.</th>
-                    <th>Nazwa</th>
-                    <th>Strava ID</th>
-                    <th>Typ</th>
-                    <th>Kategoria</th>
-                    <th>Strefa</th>
-                    <th>Sektor</th>
-{#                    <th>Ostatnia aktualizacja</th>#}
-                    <th>Dodaj do aktualizacji</th>
-                </tr>
+            <tr>
+                <th>l.p.</th>
+                <th>Nazwa</th>
+                <th>Strava ID</th>
+                <th>Typ</th>
+                <th>Kategoria</th>
+                <th>Strefa</th>
+                <th>Sektor</th>
+                {#                    <th>Ostatnia aktualizacja</th>#}
+                <th>
+                    <label for="checkAll">
+                        <input type="checkbox" id="checkAll" class="check"> Dodaj do aktualizacji
+                    </label>
+                </th>
+
+            </tr>
             </thead>
             <tbody>
-                {% for segment in segments %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ segment.strava_segment_name }}</td>
-                        <td>
-                            <a href="https://www.strava.com/segments/{{ segment.strava_segment_id }}">{{ segment.strava_segment_id }}</a>
-                        </td>
-                        <td>{{ segment.get_srodunia_segment_type_display }}</td>
-                        <td>{{ segment.get_srodunia_segment_cat_display }}</td>
-                        <td>{{ segment.get_srodunia_segment_zone_display }}</td>
-                        <td>{{ segment.get_srodunia_segment_section_display }}</td>
-{#                            <td>None</td> <!-- TODO: Zrobić to kiedyś -->#}
-                        <td><label>
-                            <input type="checkbox" name="strava_segment_id" checked value="{{ segment.strava_segment_id }}">
-                        </label></td>
-                    </tr>
-                {% endfor %}
+            {% for segment in segments|dictsort:'strava_segment_name' %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ segment.strava_segment_name }}</td>
+                    <td>
+                        <a href="https://www.strava.com/segments/{{ segment.strava_segment_id }}" target="_blank">{{ segment.strava_segment_id }}</a>
+                    </td>
+                    <td>{{ segment.get_srodunia_segment_type_display }}</td>
+                    <td>{{ segment.get_srodunia_segment_cat_display }}</td>
+                    <td>{{ segment.get_srodunia_segment_zone_display }}</td>
+                    <td>{{ segment.get_srodunia_segment_section_display }}</td>
+                    {#                            <td>None</td> <!-- TODO: Zrobić to kiedyś -->#}
+                    <td><label>
+                        <input type="checkbox" class="check" name="strava_segment_id"
+                               value="{{ segment.strava_segment_id }}">
+                    </label></td>
+                </tr>
+            {% endfor %}
             </tbody>
         </table>
 
     </form>
+{% endblock %}
+{% block scripts %}
+    <script>
+
+        $("#checkAll").click(function () {
+            $(".check").prop('checked', $(this).prop('checked'));
+        });
+    </script>
 {% endblock %}

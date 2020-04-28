@@ -36,8 +36,10 @@ class ScrapeSegmentsLeaderboards(View):
 
     def post(self, request):
         segments_to_scrape = request.POST.getlist('strava_segment_id')
+        time_frame = request.POST.get('time_frame')
         print(segments_to_scrape)
-        scrape_weekly_leaderboards('mirko.dravik@gmail.com', 'Dravikson123', segments_to_scrape, 'This Week')
+        print(time_frame)
+        scrape_weekly_leaderboards('mirko.dravik@gmail.com', 'Dravikson123', segments_to_scrape, time_frame)
         return self.get(request)
 
 

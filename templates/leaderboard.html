@@ -3,22 +3,32 @@
     Leaderboard
 {% endblock %}
 {% block content %}
-    <table>
+    <table id="leaderboard_all" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
         <thead>
-            <tr>
-                <th>l.p.</th>
-                <th>Zawodnik</th>
-                <th>Punkty</th>
-            </tr>
+        <tr>
+            <th>l.p.</th>
+            <th>Zawodnik</th>
+            <th>Punkty</th>
+            <th>Liczba Zaliczonych Segmentów</th>
+        </tr>
         </thead>
         <tbody>
-            {% for row in leaderboard|dictsortreversed:'points__sum' %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ row.strava_athlete_id__strava_athlete_name }}</td>
-                    <td>{{ row.points__sum }}</td>
-                </tr>
-            {% endfor %}
+        {% for row in leaderboard|dictsort:'effort_count'|dictsortreversed:'sum_points' %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>
+                    <a href="{% url 'athlete_detailed' row.strava_athlete_id %}">{{ row.strava_athlete_id__strava_athlete_name }}</a>
+                </td>
+                <td>{{ row.sum_points }}</td>
+                <td>{{ row.effort_count }}</td>
+            </tr>
+        {% endfor %}
         </tbody>
     </table>
+    {% block scripts %}
+
+        <script>
+
+        </script>
+    {% endblock %}
 {% endblock %}

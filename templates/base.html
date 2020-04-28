@@ -9,14 +9,24 @@
         {% endblock %}
     </title>
     <style type="text/css">
-    body {
-        padding-top: 5rem;
-    }
+        body {
+            padding-top: 5rem;
+        }
     </style>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://nightly.datatables.net/css/dataTables.bootstrap4.min.css"/>
+    <link href='https://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet'>
+    <style>
+    body {
+        font-family: 'Ubuntu', sans-serif;
+    }
+    </style>
 </head>
 <body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
     <a class="navbar-brand" href="/">Home</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
@@ -27,43 +37,53 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item btn-outline-dark">
-                <a class="nav-link" href="{% url 'weekly_leaderboard' %}">Wyniki<span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="{% url 'weekly_leaderboard' %}">Wyniki<span
+                        class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'segments_all' %}">Segementy</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="">Zawodnicy</a>
+                <a class="nav-link" href="{% url 'athletes_all' %}">Zawodnicy</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link btn btn-outline-danger" href="{% url 'scrape_home' %}">SCRAPER</a>
-            </li>
-
-
-{#            #}
-{#            <li class="nav-item dropdown">#}
-{#                <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true"#}
-{#                   aria-expanded="false">Dropdown</a>#}
-{#                <div class="dropdown-menu" aria-labelledby="dropdown01">#}
-{#                    <a class="dropdown-item" href="#">Action</a>#}
-{#                    <a class="dropdown-item" href="#">Another action</a>#}
-{#                    <a class="dropdown-item" href="#">Something else here</a>#}
-{#                </div>#}
-{#            </li>#}
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-            <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-        </form>
+        <ul class="navbar-nav float-right">
+            <li class="nav-item dropdown">
+                <a class="nav-link btn btn-outline-danger dropdown-toggle drop" data-toggle="dropdown"
+                   href="{% url 'scrape_home' %}" role="button"
+                   aria-haspopup="true" aria-expanded="false">SCRAPER</a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="{% url 'scrape_members' %}">Pobierz Zawodników</a>
+                    <a class="dropdown-item" href="{% url 'scrape_segments' %}">Pobierz Segmenty</a>
+                    <a class="dropdown-item" href="{% url 'scrape_leaderboards' %}">Pobierz Wyniki</a>
+                </div>
+                {#                <a class="nav-link btn btn-outline-danger" href="{% url 'scrape_home' %}">SCRAPER</a>#}
+            </li>
+
+
+            {#            #}
+            {#            <li class="nav-item dropdown">#}
+            {#                <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true"#}
+            {#                   aria-expanded="false">Dropdown</a>#}
+            {#                <div class="dropdown-menu" aria-labelledby="dropdown01">#}
+            {#                    <a class="dropdown-item" href="#">Action</a>#}
+            {#                    <a class="dropdown-item" href="#">Another action</a>#}
+            {#                    <a class="dropdown-item" href="#">Something else here</a>#}
+            {#                </div>#}
+            {#            </li>#}
+        </ul>
     </div>
 </nav>
 
 
 {% block content %}
-<div class="container">
-            <h1>Base Template</h1>
-</div>
+    <div class="container">
+        <h1>Base Template</h1>
+    </div>
 {% endblock %}
+        </div>
+    </div>
+</div>
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
         integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
         crossorigin="anonymous"></script>
@@ -73,5 +93,50 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
         integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
         crossorigin="anonymous"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $('.table').DataTable({
+                'language': {
+                    "processing": "Przetwarzanie...",
+                    "search": "Szukaj:",
+                    "lengthMenu": "Pokaż _MENU_ pozycji",
+                    "info": "Pozycje od _START_ do _END_ z _TOTAL_ łącznie",
+                    "infoEmpty": "Pozycji 0 z 0 dostępnych",
+                    "infoFiltered": "(filtrowanie spośród _MAX_ dostępnych pozycji)",
+                    "infoPostFix": "",
+                    "loadingRecords": "Wczytywanie...",
+                    "zeroRecords": "Nie znaleziono pasujących pozycji",
+                    "emptyTable": "Brak danych",
+                    "paginate": {
+                        "first": "Pierwsza",
+                        "previous": "Poprzednia",
+                        "next": "Następna",
+                        "last": "Ostatnia"
+                    },
+                    "aria": {
+                        "sortAscending": ": aktywuj, by posortować kolumnę rosnąco",
+                        "sortDescending": ": aktywuj, by posortować kolumnę malejąco"
+                    }
+                }
+            }
+        );
+    });
+</script>
+<script>
+    $('#info_table').DataTable({
+            searching: false,
+            ordering: false,
+            lengthChange: false,
+            paging: false,
+            info: false,
+        }
+    );
+</script>
+{% block scripts %}
+{% endblock %}
 </body>
 </html>

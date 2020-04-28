@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}
+    Athlete Details
+{% endblock %}
+{% block content %}
+    <img class="rounded-circle" style="height: 100px; width: 100px" src="{{ athlete.athlete_avatar_img_url }}" alt=""><br>
+    <h4>{{ athlete.strava_athlete_name }}</h4>
+    <table class="table table-striped table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>l.p.</th>
+                <th>Nazwa Segmentu</th>
+                <th>Czas Przejazdu</th>
+                <th>Data Przejazdu</th>
+                <th>Tydzień</th>
+                <th>Miejsce</th>
+                <th>Punkty</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for result in results|dictsortreversed:'points'|dictsortreversed:'effort_date' %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td><a href="{% url 'segment_detailed' result.strava_segement_id_id %}">{{ result.strava_segement_id }}</a></td>
+                    <td>{{ result.time_result }}</td>
+                    <td>{{ result.effort_date }}</td>
+                    <td>{{ result.week_number}}</td>
+                    <td>{{ result.rank}}</td>
+                    <td>{{ result.points}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+
+
+    </table>
+{% endblock %}

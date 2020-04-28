@@ -23,5 +23,6 @@ def push_segment_to_db():
                           star_count=i['star_count'])
         )
 
+
 if __name__ == '__main__':
     push_segment_to_db()

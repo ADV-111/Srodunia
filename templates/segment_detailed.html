@@ -3,64 +3,92 @@
     Segment Detailed {{ segment.id }}
 {% endblock %}
 {% block content %}
-<div class="row">
-    <div class="col-8">
-
-        <h3>{{ segment.strava_segment_name }}</h3>
-        <table class="table table-borderless">
-            <thead>
-            <tr>
-                <th>Dystans</th>
-                <th>Średnie nachylenie</th>
-                <th>Nachylenie Max</th>
-                <th>Wznios</th>
-                <th>Typ</th>
-                <th>Kat.</th>
-                <th>Strefa</th>
-                <th>Sektor</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>{{ segment.distance }}</td>
-                <td>{{ segment.average_grade }}</td>
-                <td>{{ segment.maximum_grade }}</td>
-                <td>{{ segment.total_elevation_gain }}</td>
-                <td>{{ segment.srodunia_segment_type }}</td>
-                <td>{{ segment.srodunia_segment_cat }}</td>
-                <td>{{ segment.srodunia_segment_zone }}</td>
-                <td>{{ segment.srodunia_segment_section }}</td>
-            </tr>
-            </tbody>
-        </table>
-        <h4>Wyniki z obecnego tygodnia</h4>
-        <h5>Wybierz numer tygodnia</h5>
-        {% for week in weeks %}
-            {% if week.week_number %}
-                <ul class="list-group list-group-horizontal">
-                    <li class="list-group-item">{{ week.week_number }}</li>
-                </ul>
-            {% endif %}
-        {% endfor %}
-        <table class="table table-striped table-hover table-bordered">
-            <thead>
-            <tr>
-                <th>Miejsce</th>
-                <th>Zawodnik</th>
-                <th>Data</th>
-                <th>Prędkość</th>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row">
+            <div class="col-md-8">
+                <h1>{{ segment.strava_segment_name }}</h1>
+            </div>
+            <div class="col-md-4">
+                <h1>Wyniki z tygodnia: <span style="color: red">{{ week_number }}</span></h1>
+            </div>
+            </div>
+            <hr>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-8">
+            <table id="info_table" class="table table-condensed table-bordered text-center">
+                <thead>
+                <tr>
+                    <th style="width: 12%">Dystans</th>
+                    <th style="width: 12%">Śr. Nachylenie</th>
+                    <th style="width: 12%">Max Nachylenie</th>
+                    <th style="width: 12%">Wznios</th>
+                    <th style="width: 12%">Kat.</th>
+                    <th style="width: 12%">Typ</th>
+                    <th style="width: 12%">Strefa</th>
+                    <th style="width: 12%">Sektor</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>{{ segment.distance }}</td>
+                    <td>{{ segment.average_grade }}</td>
+                    <td>{{ segment.maximum_grade }}</td>
+                    <td>{{ segment.total_elevation_gain }}</td>
+                    <td>{{ segment.get_srodunia_segment_cat_display }}</td>
+                    <td>{{ segment.get_srodunia_segment_type_display }}</td>
+                    <td>{{ segment.get_srodunia_segment_zone_display }}</td>
+                    <td>{{ segment.get_srodunia_segment_section_display }}</td>
+                </tr>
+                </tbody>
+            </table>
+            <br><br>
+            <h5>POKAŻ WYNIKI DLA TYGODNIA NR:</h5>
+            <ul class="list-group list-group-horizontal">
+                {% for week in weeks %}
+                    {% if week.week_number %}
+                        <li class="list-group-item p-0">
+                            {% if week.week_number == week_number %}
+                            <form action="" method="post">{% csrf_token %}
+                                <input class="btn-outline-dark list-group-item p-1 rounded-0" type="submit" name="week_number"
+                                       value="{{ week.week_number }}" style="color: red">
+                            </form>
+                            {% else %}
+                                <form action="" method="post">{% csrf_token %}
+                                <input class="btn-outline-dark list-group-item p-1 rounded-0" type="submit" name="week_number"
+                                       value="{{ week.week_number }}">
+                                </form>
+                            {% endif %}
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+            <hr>
+                <br><br>
+            <table class="table table-striped table-hover table-bordered">
+                <thead>
+                <tr>
+                    <th>Miejsce</th>
+                    <th>Zawodnik</th>
+                    <th>Data</th>
+                    <th>Prędkość</th>
                     <th>HR</th>
                     <th>Moc</th>
                     <th>Czas</th>
                     <th>Punkty</th>
                 </tr>
-            </thead>
-            <tbody>
+                </thead>
+                <tbody>
                 {% for row in leaderboard %}
                     <tr>
                         <td>{{ row.rank }}</td>
-                        <td><img class="rounded-circle" style="height: 35px; width: 35px " src="{{ row.strava_athlete_id.athlete_avatar_img_url }}" alt="">{{ row.strava_athlete_id.strava_athlete_name }}</td>
-                        <td>{{ row.effort_date }}</td>
+                        <td><img class="rounded-circle" style="height: 35px; width: 35px "
+                                 src="{{ row.strava_athlete_id.athlete_avatar_img_url }}" alt=""><a
+                                href="{% url 'athlete_detailed' row.strava_athlete_id_id %}">{{ row.strava_athlete_id.strava_athlete_name }}</a>
+                        </td>
+                        <td><a href="https://www.strava.com/activities/{{ row.strava_activity_id }}/segments/{{ row.strava_effort_id }}" target="_blank">{{ row.effort_date }}</a></td>
                         <td>{{ row.avg_speed }}</td>
                         <td>{{ row.avg_hr }}</td>
                         <td>{{ row.avg_power }}</td>
@@ -69,14 +97,15 @@
                     </tr>
                 {% endfor %}
 
-            </tbody>
-        </table>
+                </tbody>
+            </table>
 
+        </div>
+        <div class="col-4">
+            <iframe class="embed-responsive-item" style="width:100%;height:600px;"
+                    src="https://veloviewer.com/segments/{{ segment.strava_segment_id }}/embed2?default2d=y"
+                    frameborder="0"
+                    scrolling="no"></iframe>
+        </div>
     </div>
-    <div class="col-4">
-        <iframe class="embed-responsive-item" style="width:90%;height:600px;"
-                src="https://veloviewer.com/segments/{{ segment.strava_segment_id }}/embed2?default2d=y" frameborder="0"
-                scrolling="no"></iframe>
-    </div>
-</div>
 {% endblock %}
